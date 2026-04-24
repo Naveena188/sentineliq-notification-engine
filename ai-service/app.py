@@ -6,6 +6,10 @@ load_dotenv()
 
 app = Flask(__name__)
 
+# Register blueprints
+from routes.describe import describe_bp
+app.register_blueprint(describe_bp)
+
 @app.route("/health", methods=["GET"])
 def health():
     return {

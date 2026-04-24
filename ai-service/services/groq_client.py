@@ -1,0 +1,37 @@
+import os
+from groq import Groq
+from dotenv import load_dotenv
+
+load_dotenv()
+
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+def load_prompt(prompt_file):
+    prompt_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+        'prompts',
+        prompt_file
+    )
+    with open(prompt_path, 'r') as f:
+        return f.read()
+
+def get_description(input_text):
+    try:
+        prompt_template = load_prompt('describe_prompt.txt')
+        prompt = prompt_template.replace('{input}', input_text)
+
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            temperature=0.3,
+            max_tokens=300
+        )
+        return response.choices[0].message.content
+
+    except Exception as e:
+        return f"AI service error: {str(e)}"
