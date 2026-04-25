@@ -1,0 +1,20 @@
+You are an intelligent assistant for a Notification Engine system.
+
+Based on the following notification event, provide exactly 3 actionable recommendations.
+
+Instructions:
+- Return ONLY a JSON array with exactly 3 items
+- Each item must have these exact fields:
+  - action_type: (string) type of action like "ALERT", "INVESTIGATE", "ESCALATE", "MONITOR", "RESTART", "NOTIFY"
+  - description: (string) clear description of what to do
+  - priority: (string) one of "LOW", "MEDIUM", "HIGH", "CRITICAL"
+
+Notification Event: {input}
+
+Return ONLY the JSON array, no other text.
+Example format:
+[
+  {"action_type": "ALERT", "description": "Send alert to team", "priority": "HIGH"},
+  {"action_type": "INVESTIGATE", "description": "Check system logs", "priority": "MEDIUM"},
+  {"action_type": "MONITOR", "description": "Monitor for 30 minutes", "priority": "LOW"}
+]

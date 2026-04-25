@@ -1,4 +1,5 @@
 import os
+import json
 from groq import Groq
 from dotenv import load_dotenv
 
@@ -22,12 +23,7 @@ def get_description(input_text):
 
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt
-                }
-            ],
+            messages=[{"role": "user", "content": prompt}],
             temperature=0.3,
             max_tokens=300
         )
@@ -35,3 +31,28 @@ def get_description(input_text):
 
     except Exception as e:
         return f"AI service error: {str(e)}"
+
+def get_recommendations(input_text):
+    try:
+        prompt_template = load_prompt('recommend_prompt.txt')
+        prompt = prompt_template.replace('{input}', input_text)
+
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.3,
+            max_tokens=500
+        )
+
+        content = response.choices[0].message.content
+        recommendations = json.loads(content)
+        return recommendations
+
+    except json.JSONDecodeError:
+        return [
+            {"action_type": "ALERT", "description": "Review the notification event immediately", "priority": "HIGH"},
+            {"action_type": "INVESTIGATE", "description": "Check system logs for more details", "priority": "MEDIUM"},
+            {"action_type": "MONITOR", "description": "Monitor system for next 30 minutes", "priority": "LOW"}
+        ]
+    except Exception as e:
+        return [{"action_type": "ERROR", "description": str(e), "priority": "HIGH"}]
