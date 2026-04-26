@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 import os
 import time
@@ -9,6 +9,18 @@ app = Flask(__name__)
 
 # Track server start time
 START_TIME = time.time()
+
+# Security Headers Middleware
+@app.after_request
+def add_security_headers(response):
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+    response.headers['Content-Security-Policy'] = "default-src 'self'"
+    response.headers['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+    response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate'
+    return response
 
 # Register blueprints
 from routes.describe import describe_bp
