@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask
 from dotenv import load_dotenv
 import os
 import time
@@ -9,6 +9,16 @@ app = Flask(__name__)
 
 # Track server start time
 START_TIME = time.time()
+
+# Preload sentence-transformers at startup
+print("Loading sentence-transformers model...")
+try:
+    from sentence_transformers import SentenceTransformer
+    embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+    print("Sentence-transformers model loaded successfully!")
+except Exception as e:
+    print(f"Warning: Could not load sentence-transformers: {e}")
+    embedding_model = None
 
 # Security Headers Middleware
 @app.after_request
@@ -41,6 +51,7 @@ def health():
         "status": "ok",
         "model": "llama-3.3-70b-versatile",
         "message": "AI service is running",
+        "embedding_model": "all-MiniLM-L6-v2" if embedding_model else "not loaded",
         "uptime": {
             "seconds": uptime_seconds,
             "minutes": uptime_minutes,
