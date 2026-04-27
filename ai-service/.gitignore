@@ -1,5 +1,24 @@
+# Environment variables
 .env
+
+# Python cache
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# ChromaDB data
 chroma_data/
+
+# Virtual environment
 venv/
+env/
+
+# VS Code
+.vscode/
+
+# pytest cache
+.pytest_cache/
+
+# Sentence transformers cache
+.cache/

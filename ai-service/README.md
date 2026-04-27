@@ -144,3 +144,41 @@ If Groq AI is unavailable, all endpoints return fallback responses with `is_fall
 ## Team
 - AI Developer 1: Naveena S
 - Sprint: 14 April - 9 May 2026
+## Docker Setup
+
+### Build the Docker image
+```bash
+docker build -t ai-service .
+```
+
+### Run with Docker
+```bash
+docker run -p 5000:5000 --env-file .env ai-service
+```
+
+### Run with Docker Compose
+```bash
+docker-compose up
+```
+
+## Folder Structure
+```
+ai-service/
+├── routes/
+│   ├── describe.py
+│   ├── recommend.py
+│   └── generate_report.py
+├── services/
+│   └── groq_client.py
+├── prompts/
+│   ├── describe_prompt.txt
+│   ├── recommend_prompt.txt
+│   └── report_prompt.txt
+├── app.py
+├── requirements.txt
+├── Dockerfile
+├── .env.example
+├── .gitignore
+├── README.md
+└── SECURITY.md
+```
